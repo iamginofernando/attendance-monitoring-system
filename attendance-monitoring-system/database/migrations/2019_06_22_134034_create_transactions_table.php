@@ -15,11 +15,12 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->bigIncrements('transaction_id');
-            $table->foreign('student_id')->references('student_id')->on('students');
+            $table->integer('student_id')->unsigned();
             $table->string('name');
-            $table->timestamp('check_in');
-            $table->timestamp('check_out');
+            $table->timestamp('check_in')->nullable();
+            $table->timestamp('check_out')->nullable();
             $table->timestamps();
+           
         });
     }
 
