@@ -9,7 +9,10 @@
                 'UPDATED_USER' => 'Account is updated.',
                 'DELETED_USER' => 'Account is removed.',
                 'ANNOUNCEMENT_ADDED' => 'Announcement is added.',
-                'ANNOUNCEMENT_ADDED' => 'Announcement is updated.'
+                'ANNOUNCEMENT_UPDATED' => 'Announcement is updated.',
+                'MESSAGE_ADDED' => 'Messages are added.',
+                'MESSAGE_UPDATED' => 'Messages are updated.',
+                'DELETED_MESSAGE' => 'Messages are deleted.',
             ],
         ],
         'STATUS_CODE_FAILED'     => [
