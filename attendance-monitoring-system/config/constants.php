@@ -16,5 +16,7 @@
                 'FAILED_LOGIN' => 'Your email or password is incorrect.'
             ],
         ],
+        'OK' => 200,
+        'INTERNAL' => 500
 
     ];

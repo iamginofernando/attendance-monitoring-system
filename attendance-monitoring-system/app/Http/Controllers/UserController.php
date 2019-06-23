@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Helper\Status;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
@@ -15,6 +16,22 @@ use Config;
 
 class UserController extends Controller
 {
+
+    private $status;
+    private $responseCode;
+
+    /**
+     * Initialize variables
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function __construct()
+    {
+        //block init
+        $this->status = new Status; 
+        $this->responseCode = Config::get('constants.OK'); 
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -43,7 +60,6 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $status = new Status;
         $user = '';     
 
         // Validate input
@@ -56,8 +72,9 @@ class UserController extends Controller
 
         // Return error
         if ($validator->fails()) {
-            $status->code = Config::get('constants.STATUS_CODE_FAILED.CODE');
-            $status->message = $validator->messages();
+            $this->status->code = Config::get('constants.STATUS_CODE_FAILED.CODE');
+            $this->status->message = $validator->messages();
+            $this->responseCode = Config::get('constants.INTERNAL');
         } else {
 
             // Create user
@@ -68,14 +85,14 @@ class UserController extends Controller
                 'api_token' => Str::random(60),
             ]);
 
-            $status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
-            $status->message = Config::get('constants.STATUS_SUCCESS.USER_REGISTERED');
+            $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
+            $this->status->message = Config::get('constants.STATUS_SUCCESS.USER_REGISTERED');
         }
 
         return Response::json(array(
-            'status' => $status,
+            'status' => $this->status,
             'user' => $user),
-            200
+            $this->responseCode
         );
     }
 
@@ -89,7 +106,7 @@ class UserController extends Controller
     {
         return Response::json(array(
             'user' => collect($user)->toArray()),
-            200
+            $this->responseCode
         );
     }
 
@@ -103,7 +120,7 @@ class UserController extends Controller
     {
         return Response::json(array(
             'user' => collect($user)->toArray()),
-            200
+            $this->responseCode
         );
     }
 
@@ -115,8 +132,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, User $user)
-    {
-        $status = new Status;     
+    {   
 
         // Validate input
         $validator = Validator::make($request->all(), [
@@ -127,23 +143,24 @@ class UserController extends Controller
 
         // Return error
         if ($validator->fails()) {
-            $status->code = Config::get('constants.STATUS_CODE_FAILED.CODE');
-            $status->message = $validator->messages();
+            $this->status->code = Config::get('constants.STATUS_CODE_FAILED.CODE');
+            $this->status->message = $validator->messages();
+            $this->responseCode = Config::get('constants.INTERNAL');
         } else {
 
             // Update user
-            $user->name =  $request->name;
-            $user->email =  $request->email;
+            $user->name = $request->name;
+            $user->email = $request->email;
             $user->save();
 
-            $status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
-            $status->message = Config::get('constants.STATUS_CODE_SUCCESS.UPDATED_USER');
+            $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
+            $this->status->message = Config::get('constants.STATUS_CODE_SUCCESS.UPDATED_USER');
         }
 
         return Response::json(array(
-            'status' => $status,
+            'status' => $this->status,
             'user' => $user),
-            200
+            $this->responseCode
         );
     }
 
@@ -155,15 +172,15 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $status = new Status;
-        $status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
-        $status->message = Config::get('constants.STATUS_CODE_SUCCESS.DELETED_USER');
+        $this->status = new Status;
+        $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
+        $this->status->message = Config::get('constants.STATUS_CODE_SUCCESS.DELETED_USER');
 
         $user->delete();
 
         return Response::json(array(
-            'status' => $status),
-            200
+            'status' => $this->status),
+            $this->responseCode
         );
     }
 
@@ -174,9 +191,6 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function login(Request $request) {
-
-        $auth = false;
-        $status = new Status;
         $user = '';     
 
         // Validate input
@@ -188,25 +202,27 @@ class UserController extends Controller
 
         // Return error
         if ($validator->fails()) {
-            $status->code = Config::get('constants.STATUS_CODE_FAILED.CODE');
-            $status->message = $validator->messages();
+            $this->status->code = Config::get('constants.STATUS_CODE_FAILED.CODE');
+            $this->status->message = $validator->messages();
+            $this->responseCode = Config::get('constants.INTERNAL');
         } else {
+            
             // Login user and return user's credentials
             $credentials = $request->only('email', 'password');
             if (Auth::attempt($credentials, $request->has('remember'))) {
                 $user = Auth::user();
-                $status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
-                $status->message = Config::get('constants.STATUS_CODE_SUCCESS.SUCCESS_LOGIN');
+                $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
+                $this->status->message = Config::get('constants.STATUS_CODE_SUCCESS.SUCCESS_LOGIN');
             } else {
-                $status->code = Config::get('constants.STATUS_CODE_FAILED.CODE');
-                $status->message = Config::get('constants.STATUS_CODE_FAILED.MESSAGES.FAILED_LOGIN');
+                $this->status->code = Config::get('constants.STATUS_CODE_FAILED.CODE');
+                $this->status->message = Config::get('constants.STATUS_CODE_FAILED.MESSAGES.FAILED_LOGIN');
             }
         }
 
         return Response::json(array(
-            'status' => $status,
+            'status' => $this->status,
             'user' => $user),
-            200
+            $this->responseCode
         );
     }
 
@@ -218,15 +234,14 @@ class UserController extends Controller
      */
     public function logout(Request $request) {
 
-        $status = new Status;
-
         Auth::logout();
-        $status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
-        $status->message = Config::get('constants.STATUS_CODE_SUCCESS.SUCCESS_LOGOUT');
+        $this->status = new Status;
+        $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
+        $this->status->message = Config::get('constants.STATUS_CODE_SUCCESS.SUCCESS_LOGOUT');
 
         return Response::json(array(
-            'status' => $status),
-            200
+            'status' => $this->status),
+            $this->responseCode
         );
     }
  
