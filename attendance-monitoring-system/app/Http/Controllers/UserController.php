@@ -64,7 +64,7 @@ class UserController extends Controller
 
         // Validate input
         $validator = Validator::make($request->all(),[
-                'name' => 'required|min:32',
+                'name' => 'required',
                 'password' => 'required|min:8',
                 'email' => 'required|email|unique:users'
             ]
@@ -241,6 +241,50 @@ class UserController extends Controller
 
         return Response::json(array(
             'status' => $this->status),
+            $this->responseCode
+        );
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function register(Request $request)
+    {
+        $user = '';     
+
+        // Validate input
+        $validator = Validator::make($request->all(),[
+                'name' => 'required',
+                'password' => 'required|min:8',
+                'email' => 'required|email|unique:users'
+            ]
+        );
+
+        // Return error
+        if ($validator->fails()) {
+            $this->status->code = Config::get('constants.STATUS_CODE_FAILED.CODE');
+            $this->status->message = $validator->messages();
+            $this->responseCode = Config::get('constants.INTERNAL');
+        } else {
+
+            // Create user
+            $user = User::create([
+                'name' => $request['name'],
+                'email' => $request['email'],
+                'password' => Hash::make($request['password']),
+                'api_token' => Str::random(60),
+            ]);
+
+            $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
+            $this->status->message = Config::get('constants.STATUS_SUCCESS.USER_REGISTERED');
+        }
+
+        return Response::json(array(
+            'status' => $this->status,
+            'user' => $user),
             $this->responseCode
         );
     }
