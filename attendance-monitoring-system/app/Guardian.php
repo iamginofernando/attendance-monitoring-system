@@ -4,8 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Guardian extends Model
-{
+class Guardian extends Model {
     protected $table = 'guardians';
     protected $primaryKey = 'guardian_id';
     protected $fillable = [
@@ -16,4 +15,8 @@ class Guardian extends Model
         'contact_no',
         'is_available'
     ];
+
+    public function students() {
+        return $this->hasMany('App\Student', 'student_id');
+    }
 }

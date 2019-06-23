@@ -4,8 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Transaction extends Model
-{
+class Transaction extends Model {
+
     protected $table = 'transactions';
     protected $primaryKey = 'transaction_id';
     protected $fillable = [
@@ -13,4 +13,8 @@ class Transaction extends Model
         'check_in',
         'check_out'
     ];
+
+    public function students() {
+        return $this->hasMany('App\Student', 'student_id');
+    }
 }

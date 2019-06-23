@@ -4,8 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Student extends Model
-{
+class Student extends Model {
     protected $table = 'students';
     protected $primaryKey = 'student_id';
     protected $fillable = [
@@ -20,4 +19,12 @@ class Student extends Model
         'address',
         'email'
     ];
+
+    public function guardian() {
+        return $this->belongsTo('App\Guardian', 'guardian_id');
+    }
+
+    public function transaction() {
+        return $this->belongsTo('App\Transaction', 'transaction_id');
+    }
 }
