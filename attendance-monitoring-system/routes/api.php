@@ -14,10 +14,15 @@ use Illuminate\Http\Request;
 */
 
 Route::middleware('auth:api')->group(function () {
-    Route::resource('Users', 'UserController');
-    Route::resource('Student', 'StudentController');
-    Route::resource('Guardian', 'GuardianeController');
-    Route::resource('Transaction', 'TransactionController');
-    Route::resource('Announcement', 'AnnouncementController');
-    Route::resource('Message', 'MessageController');
+
+    Route::resource('user', 'UserController');
+    Route::resource('student', 'StudentController');
+    Route::resource('guardian', 'GuardianeController');
+    Route::resource('transaction', 'TransactionController');
+    Route::resource('announcement', 'AnnouncementController');
+    Route::resource('message', 'MessageController');
 });
+
+Route::post('/register', 'UserController@register');
+Route::post('/login', 'UserController@login');
+Route::post('/logout', 'UserController@logout')->middleware('auth:api');
