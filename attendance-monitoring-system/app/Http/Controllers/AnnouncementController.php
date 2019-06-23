@@ -3,10 +3,33 @@
 namespace App\Http\Controllers;
 
 use App\Announcement;
+use App\Helper\Status;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+use Response;
+use Validator;
+use Config;
+
 
 class AnnouncementController extends Controller
 {
+    private $status;
+    private $responseCode;
+
+    /**
+     * Initialize variables
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function __construct()
+    {
+        //block init
+        $this->status = new Status; 
+        $this->responseCode = Config::get('constants.OK'); 
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +37,15 @@ class AnnouncementController extends Controller
      */
     public function index()
     {
-        //
+        $announcements = Announcement::all();
+        $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
+        $this->status->message = '';
+
+        return Response::json(array(
+            'status' => $this->status,
+            'announcements' => $announcements),
+            $this->responseCode
+        );
     }
 
     /**
@@ -22,8 +53,7 @@ class AnnouncementController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create() {
         //
     }
 
@@ -35,7 +65,36 @@ class AnnouncementController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $announcement = '';     
+
+        // Validate input
+        $validator = Validator::make($request->all(), [
+                'content' => 'required|min:30'
+            ]
+        );
+
+        // Return error
+        if ($validator->fails()) {
+            $this->status->code = Config::get('constants.STATUS_CODE_FAILED.CODE');
+            $this->status->message = $validator->messages();
+            $this->responseCode = Config::get('constants.INTERNAL');
+        } else {
+
+            // Create announcement
+            $announcement = Announcement::create([
+                'content' => $request['content'],
+                'user_id' => Auth::user()->user_id
+            ]);
+
+            $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
+            $this->status->message = Config::get('constants.STATUS_SUCCESS.ANNOUNCEMENT_ADDED');
+        }
+
+        return Response::json(array(
+            'status' => $this->status,
+            'announcement' => $announcement),
+            $this->responseCode
+        );
     }
 
     /**
@@ -46,7 +105,14 @@ class AnnouncementController extends Controller
      */
     public function show(Announcement $announcement)
     {
-        //
+        $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
+        $this->status->message = '';
+
+        return Response::json(array(
+            'status' => $this->status,
+            'announcement' => $announcement),
+            $this->responseCode
+        );
     }
 
     /**
@@ -57,7 +123,14 @@ class AnnouncementController extends Controller
      */
     public function edit(Announcement $announcement)
     {
-        //
+        $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
+        $this->status->message = '';
+
+        return Response::json(array(
+            'status' => $this->status,
+            'announcement' => $announcement),
+            $this->responseCode
+        );
     }
 
     /**
@@ -68,8 +141,34 @@ class AnnouncementController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Announcement $announcement)
-    {
-        //
+    {   
+
+        // Validate input
+        $validator = Validator::make($request->all(), [
+                'content' => 'required|min:30'
+            ]
+        );
+
+        // Return error
+        if ($validator->fails()) {
+            $this->status->code = Config::get('constants.STATUS_CODE_FAILED.CODE');
+            $this->status->message = $validator->messages();
+            $this->responseCode = Config::get('constants.INTERNAL');
+        } else {
+
+            // Update announcement
+            $announcement->content = $request->content;
+            $announcement->save();
+
+            $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
+            $this->status->message = Config::get('constants.STATUS_SUCCESS.ANNOUNCEMENT_UPDATED');
+        }
+
+        return Response::json(array(
+            'status' => $this->status,
+            'announcement' => $announcement),
+            $this->responseCode
+        );
     }
 
     /**
@@ -80,6 +179,15 @@ class AnnouncementController extends Controller
      */
     public function destroy(Announcement $announcement)
     {
-        //
+        $this->status = new Status;
+        $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
+        $this->status->message = Config::get('constants.STATUS_CODE_SUCCESS.DELETED_ANNOUNCEMENT');
+
+        $announcement->delete();
+
+        return Response::json(array(
+            'status' => $this->status),
+            $this->responseCode
+        );
     }
 }

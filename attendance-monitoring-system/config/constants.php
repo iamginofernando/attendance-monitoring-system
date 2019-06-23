@@ -7,13 +7,16 @@
                 'SUCCESS_LOGIN' => 'You successfully logged in.',
                 'SUCCESS_LOGOUT' => 'You successfully logged out.',
                 'UPDATED_USER' => 'Account is updated.',
-                'DELETED_USER' => 'Account is removed.'
+                'DELETED_USER' => 'Account is removed.',
+                'ANNOUNCEMENT_ADDED' => 'Announcement is added.',
+                'ANNOUNCEMENT_ADDED' => 'Announcement is updated.'
             ],
         ],
         'STATUS_CODE_FAILED'     => [
             'CODE'              => 'failed',
             'MESSAGES'          => [
-                'FAILED_LOGIN' => 'Your email or password is incorrect.'
+                'FAILED_LOGIN' => 'Your email or password is incorrect.',
+
             ],
         ],
         'OK' => 200,

@@ -39,7 +39,15 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::all();
+        $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
+        $this->status->message = '';
+
+        return Response::json(array(
+            'status' => $this->status,
+            'users' => $users),
+            $this->responseCode
+        );
     }
 
     /**
