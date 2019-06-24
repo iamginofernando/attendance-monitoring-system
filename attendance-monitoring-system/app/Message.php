@@ -10,6 +10,7 @@ class Message extends Model
     protected $primaryKey = 'message_id';
     protected $fillable = [
         'check_in',
-        'check_out'
+        'check_out',
+        'user_id'
     ];
 }
