@@ -13,6 +13,8 @@
                 'MESSAGE_ADDED' => 'Messages are added.',
                 'MESSAGE_UPDATED' => 'Messages are updated.',
                 'DELETED_MESSAGE' => 'Messages are deleted.',
+                'STUDENT_ADDED' => 'Student successfully added.',
+                'UPDATED_STUDENT' => 'Student successfully updated.'
             ],
         ],
         'STATUS_CODE_FAILED'     => [

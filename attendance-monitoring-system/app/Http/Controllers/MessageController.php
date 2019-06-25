@@ -90,7 +90,7 @@ class MessageController extends Controller
             ]);
 
             $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
-            $this->status->message = Config::get('constants.STATUS_SUCCESS.MESSAGE_ADDED');
+            $this->status->message = Config::get('constants.STATUS_CODE_SUCCESS.MESSAGES.MESSAGE_ADDED');
         }
 
         return Response::json(array(
@@ -165,7 +165,7 @@ class MessageController extends Controller
         $message->save();
 
         $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
-        $this->status->message = Config::get('constants.STATUS_SUCCESS.MESSAGE_UPDATED');
+        $this->status->message = Config::get('constants.STATUS_CODE_SUCCESS.MESSAGES.MESSAGE_UPDATED');
     }
 
     return Response::json(array(
@@ -185,7 +185,7 @@ class MessageController extends Controller
     {
         $this->status = new Status;
         $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
-        $this->status->message = Config::get('constants.STATUS_CODE_SUCCESS.DELETED_MESSAGE');
+        $this->status->message = Config::get('constants.STATUS_CODE_SUCCESS.MESSAGES.DELETED_MESSAGE');
 
         $message->delete();
 

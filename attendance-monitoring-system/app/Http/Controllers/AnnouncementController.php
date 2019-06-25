@@ -87,7 +87,7 @@ class AnnouncementController extends Controller
             ]);
 
             $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
-            $this->status->message = Config::get('constants.STATUS_SUCCESS.ANNOUNCEMENT_ADDED');
+            $this->status->message = Config::get('constants.STATUS_CODE_SUCCESS.MESSAGES.ANNOUNCEMENT_ADDED');
         }
 
         return Response::json(array(
@@ -161,7 +161,7 @@ class AnnouncementController extends Controller
             $announcement->save();
 
             $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
-            $this->status->message = Config::get('constants.STATUS_SUCCESS.ANNOUNCEMENT_UPDATED');
+            $this->status->message = Config::get('constants.STATUS_CODE_SUCCESS.MESSAGES.ANNOUNCEMENT_UPDATED');
         }
 
         return Response::json(array(

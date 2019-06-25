@@ -14,10 +14,8 @@ use Illuminate\Http\Request;
 */
 
 Route::middleware('auth:api')->group(function () {
-
     Route::resource('user', 'UserController');
     Route::resource('student', 'StudentController');
-    Route::resource('guardian', 'GuardianeController');
     Route::resource('transaction', 'TransactionController');
     Route::resource('announcement', 'AnnouncementController');
     Route::resource('message', 'MessageController');

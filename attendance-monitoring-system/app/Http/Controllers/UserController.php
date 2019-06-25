@@ -94,7 +94,7 @@ class UserController extends Controller
             ]);
 
             $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
-            $this->status->message = Config::get('constants.STATUS_SUCCESS.USER_REGISTERED');
+            $this->status->message = Config::get('constants.STATUS_CODE_SUCCESS.MESSAGES.USER_REGISTERED');
         }
 
         return Response::json(array(
@@ -162,7 +162,7 @@ class UserController extends Controller
             $user->save();
 
             $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
-            $this->status->message = Config::get('constants.STATUS_CODE_SUCCESS.UPDATED_USER');
+            $this->status->message = Config::get('constants.STATUS_CODE_SUCCESS.MESSAGES.UPDATED_USER');
         }
 
         return Response::json(array(
@@ -182,7 +182,7 @@ class UserController extends Controller
     {
         $this->status = new Status;
         $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
-        $this->status->message = Config::get('constants.STATUS_CODE_SUCCESS.DELETED_USER');
+        $this->status->message = Config::get('constants.STATUS_CODE_SUCCESS.MESSAGES.DELETED_USER');
 
         $user->delete();
 
@@ -287,7 +287,7 @@ class UserController extends Controller
             ]);
 
             $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
-            $this->status->message = Config::get('constants.STATUS_SUCCESS.USER_REGISTERED');
+            $this->status->message = Config::get('constants.STATUS_CODE_SUCCESS.USER_REGISTERED');
         }
 
         return Response::json(array(
