@@ -14,7 +14,7 @@ class Transaction extends Model {
         'check_out'
     ];
 
-    public function students() {
-        return $this->hasMany('App\Student', 'student_id');
+    public function student() {
+        return $this->belongsTo('App\Student', 'student_id');
     }
 }

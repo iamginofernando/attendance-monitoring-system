@@ -14,6 +14,7 @@ use Response;
 use Validator;
 use Config;
 
+
 class UserController extends Controller
 {
 

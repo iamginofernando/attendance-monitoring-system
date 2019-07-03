@@ -14,7 +14,9 @@
                 'MESSAGE_UPDATED' => 'Messages are updated.',
                 'DELETED_MESSAGE' => 'Messages are deleted.',
                 'STUDENT_ADDED' => 'Student successfully added.',
-                'UPDATED_STUDENT' => 'Student successfully updated.'
+                'UPDATED_STUDENT' => 'Student successfully updated.',
+                'DELETED_STUDENT' => 'Student successfully deleted.',
+                'TRANSACTION_ADDED' => 'Transaction added.'
             ],
         ],
         'STATUS_CODE_FAILED'     => [

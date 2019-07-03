@@ -181,7 +181,7 @@ class AnnouncementController extends Controller
     {
         $this->status = new Status;
         $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
-        $this->status->message = Config::get('constants.STATUS_CODE_SUCCESS.DELETED_ANNOUNCEMENT');
+        $this->status->message = Config::get('constants.STATUS_CODE_SUCCESS.MESSAGES.DELETED_ANNOUNCEMENT');
 
         $announcement->delete();
 
