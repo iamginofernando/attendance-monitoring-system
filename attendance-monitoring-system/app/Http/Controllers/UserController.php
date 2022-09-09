@@ -2,23 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
 use App\Helper\Status;
-
+use App\User;
+use Config;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Response;
 use Validator;
-use Config;
-
 
 class UserController extends Controller
 {
-
     private $status;
+
     private $responseCode;
 
     /**
@@ -29,8 +26,8 @@ class UserController extends Controller
     public function __construct()
     {
         //block init
-        $this->status = new Status; 
-        $this->responseCode = Config::get('constants.OK'); 
+        $this->status = new Status;
+        $this->responseCode = Config::get('constants.OK');
     }
 
     /**
@@ -44,9 +41,9 @@ class UserController extends Controller
         $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
         $this->status->message = '';
 
-        return Response::json(array(
+        return Response::json([
             'status' => $this->status,
-            'users' => $users),
+            'users' => $users, ],
             $this->responseCode
         );
     }
@@ -69,14 +66,14 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $user = '';     
+        $user = '';
 
         // Validate input
-        $validator = Validator::make($request->all(),[
-                'name' => 'required',
-                'password' => 'required|min:8',
-                'email' => 'required|email|unique:users'
-            ]
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'password' => 'required|min:8',
+            'email' => 'required|email|unique:users',
+        ]
         );
 
         // Return error
@@ -98,9 +95,9 @@ class UserController extends Controller
             $this->status->message = Config::get('constants.STATUS_CODE_SUCCESS.MESSAGES.USER_REGISTERED');
         }
 
-        return Response::json(array(
+        return Response::json([
             'status' => $this->status,
-            'user' => $user),
+            'user' => $user, ],
             $this->responseCode
         );
     }
@@ -113,8 +110,8 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return Response::json(array(
-            'user' => collect($user)->toArray()),
+        return Response::json([
+            'user' => collect($user)->toArray(), ],
             $this->responseCode
         );
     }
@@ -127,8 +124,8 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return Response::json(array(
-            'user' => collect($user)->toArray()),
+        return Response::json([
+            'user' => collect($user)->toArray(), ],
             $this->responseCode
         );
     }
@@ -141,13 +138,13 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, User $user)
-    {   
+    {
 
         // Validate input
         $validator = Validator::make($request->all(), [
-                'name' => 'required',
-                'email' => 'required|email|unique:users'
-            ]
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+        ]
         );
 
         // Return error
@@ -166,9 +163,9 @@ class UserController extends Controller
             $this->status->message = Config::get('constants.STATUS_CODE_SUCCESS.MESSAGES.UPDATED_USER');
         }
 
-        return Response::json(array(
+        return Response::json([
             'status' => $this->status,
-            'user' => $user),
+            'user' => $user, ],
             $this->responseCode
         );
     }
@@ -187,8 +184,8 @@ class UserController extends Controller
 
         $user->delete();
 
-        return Response::json(array(
-            'status' => $this->status),
+        return Response::json([
+            'status' => $this->status, ],
             $this->responseCode
         );
     }
@@ -199,14 +196,15 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function login(Request $request) {
-        $user = '';     
+    public function login(Request $request)
+    {
+        $user = '';
 
         // Validate input
-        $validator = Validator::make($request->all(),[
-                'email' => 'required',
-                'password' => 'required'
-            ]
+        $validator = Validator::make($request->all(), [
+            'email' => 'required',
+            'password' => 'required',
+        ]
         );
 
         // Return error
@@ -215,7 +213,7 @@ class UserController extends Controller
             $this->status->message = $validator->messages();
             $this->responseCode = Config::get('constants.INTERNAL');
         } else {
-            
+
             // Login user and return user's credentials
             $credentials = $request->only('email', 'password');
             if (Auth::attempt($credentials, $request->has('remember'))) {
@@ -228,9 +226,9 @@ class UserController extends Controller
             }
         }
 
-        return Response::json(array(
+        return Response::json([
             'status' => $this->status,
-            'user' => $user),
+            'user' => $user, ],
             $this->responseCode
         );
     }
@@ -241,15 +239,15 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function logout(Request $request) {
-
+    public function logout(Request $request)
+    {
         Auth::logout();
         $this->status = new Status;
         $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
         $this->status->message = Config::get('constants.STATUS_CODE_SUCCESS.SUCCESS_LOGOUT');
 
-        return Response::json(array(
-            'status' => $this->status),
+        return Response::json([
+            'status' => $this->status, ],
             $this->responseCode
         );
     }
@@ -262,14 +260,14 @@ class UserController extends Controller
      */
     public function register(Request $request)
     {
-        $user = '';     
+        $user = '';
 
         // Validate input
-        $validator = Validator::make($request->all(),[
-                'name' => 'required',
-                'password' => 'required|min:8',
-                'email' => 'required|email|unique:users'
-            ]
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'password' => 'required|min:8',
+            'email' => 'required|email|unique:users',
+        ]
         );
 
         // Return error
@@ -291,11 +289,10 @@ class UserController extends Controller
             $this->status->message = Config::get('constants.STATUS_CODE_SUCCESS.USER_REGISTERED');
         }
 
-        return Response::json(array(
+        return Response::json([
             'status' => $this->status,
-            'user' => $user),
+            'user' => $user, ],
             $this->responseCode
         );
     }
- 
 }

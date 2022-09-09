@@ -2,20 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Message;
 use App\Helper\Status;
-
+use App\Message;
+use Config;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
 use Response;
 use Validator;
-use Config;
 
 class MessageController extends Controller
 {
-
     private $status;
+
     private $responseCode;
 
     /**
@@ -26,8 +24,8 @@ class MessageController extends Controller
     public function __construct()
     {
         //block init
-        $this->status = new Status; 
-        $this->responseCode = Config::get('constants.OK'); 
+        $this->status = new Status;
+        $this->responseCode = Config::get('constants.OK');
     }
 
     /**
@@ -41,9 +39,9 @@ class MessageController extends Controller
         $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
         $this->status->message = '';
 
-        return Response::json(array(
+        return Response::json([
             'status' => $this->status,
-            'messages' => $messages),
+            'messages' => $messages, ],
             $this->responseCode
         );
     }
@@ -66,13 +64,13 @@ class MessageController extends Controller
      */
     public function store(Request $request)
     {
-        $message = '';     
+        $message = '';
 
         // Validate input
         $validator = Validator::make($request->all(), [
-                'check_in' => 'required|min:30',
-                'check_out' => 'required|min:30'
-            ]
+            'check_in' => 'required|min:30',
+            'check_out' => 'required|min:30',
+        ]
         );
 
         // Return error
@@ -86,16 +84,16 @@ class MessageController extends Controller
             $message = Message::create([
                 'check_in' => $request['check_in'],
                 'check_out' => $request['check_out'],
-                'user_id' => Auth::user()->user_id
+                'user_id' => Auth::user()->user_id,
             ]);
 
             $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
             $this->status->message = Config::get('constants.STATUS_CODE_SUCCESS.MESSAGES.MESSAGE_ADDED');
         }
 
-        return Response::json(array(
+        return Response::json([
             'status' => $this->status,
-            'message' => $message),
+            'message' => $message, ],
             $this->responseCode
         );
     }
@@ -111,9 +109,9 @@ class MessageController extends Controller
         $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
         $this->status->message = '';
 
-        return Response::json(array(
+        return Response::json([
             'status' => $this->status,
-            'message' => $message),
+            'message' => $message, ],
             $this->responseCode
         );
     }
@@ -129,9 +127,9 @@ class MessageController extends Controller
         $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
         $this->status->message = '';
 
-        return Response::json(array(
+        return Response::json([
             'status' => $this->status,
-            'message' => $message),
+            'message' => $message, ],
             $this->responseCode
         );
     }
@@ -152,25 +150,25 @@ class MessageController extends Controller
         ]
     );
 
-    // Return error
-    if ($validator->fails()) {
-        $this->status->code = Config::get('constants.STATUS_CODE_FAILED.CODE');
-        $this->status->message = $validator->messages();
-        $this->responseCode = Config::get('constants.INTERNAL');
-    } else {
+        // Return error
+        if ($validator->fails()) {
+            $this->status->code = Config::get('constants.STATUS_CODE_FAILED.CODE');
+            $this->status->message = $validator->messages();
+            $this->responseCode = Config::get('constants.INTERNAL');
+        } else {
 
         // Update message
-        $message->check_in = $request->check_in;
-        $message->check_out = $request->check_out;
-        $message->save();
+            $message->check_in = $request->check_in;
+            $message->check_out = $request->check_out;
+            $message->save();
 
-        $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
-        $this->status->message = Config::get('constants.STATUS_CODE_SUCCESS.MESSAGES.MESSAGE_UPDATED');
-    }
+            $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
+            $this->status->message = Config::get('constants.STATUS_CODE_SUCCESS.MESSAGES.MESSAGE_UPDATED');
+        }
 
-    return Response::json(array(
-        'status' => $this->status,
-        'message' => $message),
+        return Response::json([
+            'status' => $this->status,
+            'message' => $message, ],
         $this->responseCode
     );
     }
@@ -189,8 +187,8 @@ class MessageController extends Controller
 
         $message->delete();
 
-        return Response::json(array(
-            'status' => $this->status),
+        return Response::json([
+            'status' => $this->status, ],
             $this->responseCode
         );
     }
