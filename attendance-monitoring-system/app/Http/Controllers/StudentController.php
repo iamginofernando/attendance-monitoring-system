@@ -2,20 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Student;
 use App\Helper\Status;
-
+use App\Student;
+use Config;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-
 use Response;
 use Validator;
-use Config;
 
 class StudentController extends Controller
 {
-
     private $status;
+
     private $responseCode;
 
     /**
@@ -26,8 +23,8 @@ class StudentController extends Controller
     public function __construct()
     {
         //block init
-        $this->status = new Status; 
-        $this->responseCode = Config::get('constants.OK'); 
+        $this->status = new Status;
+        $this->responseCode = Config::get('constants.OK');
     }
 
     /**
@@ -41,9 +38,9 @@ class StudentController extends Controller
         $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
         $this->status->message = '';
 
-        return Response::json(array(
+        return Response::json([
             'status' => $this->status,
-            'students' => $students),
+            'students' => $students, ],
             $this->responseCode
         );
     }
@@ -66,10 +63,10 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        $student = '';     
+        $student = '';
 
         // Validate input
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'section' => 'required',
             'contact_no' => 'required',
             'first_name' => 'required',
@@ -98,16 +95,16 @@ class StudentController extends Controller
                 'profile_img' => $request['profile_img'],
                 'birthday' => $request['birthday'],
                 'address' => $request['address'],
-                'email' => $request['email']
+                'email' => $request['email'],
             ]);
 
             $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
             $this->status->message = Config::get('constants.STATUS_CODE_SUCCESS.MESSAGES.STUDENT_ADDED');
         }
 
-        return Response::json(array(
+        return Response::json([
             'status' => $this->status,
-            'student' => $student),
+            'student' => $student, ],
             $this->responseCode
         );
     }
@@ -120,8 +117,8 @@ class StudentController extends Controller
      */
     public function show(Student $student)
     {
-        return Response::json(array(
-            'student' => collect($student)->toArray()),
+        return Response::json([
+            'student' => collect($student)->toArray(), ],
             $this->responseCode
         );
     }
@@ -134,8 +131,8 @@ class StudentController extends Controller
      */
     public function edit(Student $student)
     {
-        return Response::json(array(
-            'student' => collect($student)->toArray()),
+        return Response::json([
+            'student' => collect($student)->toArray(), ],
             $this->responseCode
         );
     }
@@ -151,7 +148,7 @@ class StudentController extends Controller
     {
 
         // Validate input
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'section' => 'required',
             'contact_no' => 'required',
             'first_name' => 'required',
@@ -163,33 +160,33 @@ class StudentController extends Controller
             'email' => 'required|email',
         ]);
 
-    // Return error
-    if ($validator->fails()) {
-        $this->status->code = Config::get('constants.STATUS_CODE_FAILED.CODE');
-        $this->status->message = $validator->messages();
-        $this->responseCode = Config::get('constants.INTERNAL');
-    } else {
+        // Return error
+        if ($validator->fails()) {
+            $this->status->code = Config::get('constants.STATUS_CODE_FAILED.CODE');
+            $this->status->message = $validator->messages();
+            $this->responseCode = Config::get('constants.INTERNAL');
+        } else {
 
         // Update student
-        $student->student_rfid = $request->student_rfid;
-        $student->section = $request->section;
-        $student->contact_no = $request->contact_no;
-        $student->first_name = $request->first_name;
-        $student->last_name = $request->last_name;
-        $student->middle_name = $request->middle_name;
-        $student->profile_img = $request->profile_img;
-        $student->birthday = $request->birthday;
-        $student->address = $request->address;
-        $student->email = $request->email;
-        $student->save();
+            $student->student_rfid = $request->student_rfid;
+            $student->section = $request->section;
+            $student->contact_no = $request->contact_no;
+            $student->first_name = $request->first_name;
+            $student->last_name = $request->last_name;
+            $student->middle_name = $request->middle_name;
+            $student->profile_img = $request->profile_img;
+            $student->birthday = $request->birthday;
+            $student->address = $request->address;
+            $student->email = $request->email;
+            $student->save();
 
-        $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
-        $this->status->message = Config::get('constants.STATUS_CODE_SUCCESS.MESSAGES.UPDATED_STUDENT');
-    }
+            $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
+            $this->status->message = Config::get('constants.STATUS_CODE_SUCCESS.MESSAGES.UPDATED_STUDENT');
+        }
 
-    return Response::json(array(
-        'status' => $this->status,
-        'student' => $student),
+        return Response::json([
+            'status' => $this->status,
+            'student' => $student, ],
         $this->responseCode
     );
     }
@@ -208,8 +205,8 @@ class StudentController extends Controller
 
         $student->delete();
 
-        return Response::json(array(
-            'status' => $this->status),
+        return Response::json([
+            'status' => $this->status, ],
             $this->responseCode
         );
     }

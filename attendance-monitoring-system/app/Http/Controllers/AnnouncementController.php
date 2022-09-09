@@ -4,18 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Announcement;
 use App\Helper\Status;
-
+use Config;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
 use Response;
 use Validator;
-use Config;
-
 
 class AnnouncementController extends Controller
 {
     private $status;
+
     private $responseCode;
 
     /**
@@ -26,8 +24,8 @@ class AnnouncementController extends Controller
     public function __construct()
     {
         //block init
-        $this->status = new Status; 
-        $this->responseCode = Config::get('constants.OK'); 
+        $this->status = new Status;
+        $this->responseCode = Config::get('constants.OK');
     }
 
     /**
@@ -41,9 +39,9 @@ class AnnouncementController extends Controller
         $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
         $this->status->message = '';
 
-        return Response::json(array(
+        return Response::json([
             'status' => $this->status,
-            'announcements' => $announcements),
+            'announcements' => $announcements, ],
             $this->responseCode
         );
     }
@@ -53,7 +51,8 @@ class AnnouncementController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create() {
+    public function create()
+    {
         //
     }
 
@@ -65,12 +64,12 @@ class AnnouncementController extends Controller
      */
     public function store(Request $request)
     {
-        $announcement = '';     
+        $announcement = '';
 
         // Validate input
         $validator = Validator::make($request->all(), [
-                'content' => 'required|min:30'
-            ]
+            'content' => 'required|min:30',
+        ]
         );
 
         // Return error
@@ -83,16 +82,16 @@ class AnnouncementController extends Controller
             // Create announcement
             $announcement = Announcement::create([
                 'content' => $request['content'],
-                'user_id' => Auth::user()->user_id
+                'user_id' => Auth::user()->user_id,
             ]);
 
             $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
             $this->status->message = Config::get('constants.STATUS_CODE_SUCCESS.MESSAGES.ANNOUNCEMENT_ADDED');
         }
 
-        return Response::json(array(
+        return Response::json([
             'status' => $this->status,
-            'announcement' => $announcement),
+            'announcement' => $announcement, ],
             $this->responseCode
         );
     }
@@ -108,9 +107,9 @@ class AnnouncementController extends Controller
         $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
         $this->status->message = '';
 
-        return Response::json(array(
+        return Response::json([
             'status' => $this->status,
-            'announcement' => $announcement),
+            'announcement' => $announcement, ],
             $this->responseCode
         );
     }
@@ -126,9 +125,9 @@ class AnnouncementController extends Controller
         $this->status->code = Config::get('constants.STATUS_CODE_SUCCESS.CODE');
         $this->status->message = '';
 
-        return Response::json(array(
+        return Response::json([
             'status' => $this->status,
-            'announcement' => $announcement),
+            'announcement' => $announcement, ],
             $this->responseCode
         );
     }
@@ -141,12 +140,12 @@ class AnnouncementController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Announcement $announcement)
-    {   
+    {
 
         // Validate input
         $validator = Validator::make($request->all(), [
-                'content' => 'required|min:30'
-            ]
+            'content' => 'required|min:30',
+        ]
         );
 
         // Return error
@@ -164,9 +163,9 @@ class AnnouncementController extends Controller
             $this->status->message = Config::get('constants.STATUS_CODE_SUCCESS.MESSAGES.ANNOUNCEMENT_UPDATED');
         }
 
-        return Response::json(array(
+        return Response::json([
             'status' => $this->status,
-            'announcement' => $announcement),
+            'announcement' => $announcement, ],
             $this->responseCode
         );
     }
@@ -185,8 +184,8 @@ class AnnouncementController extends Controller
 
         $announcement->delete();
 
-        return Response::json(array(
-            'status' => $this->status),
+        return Response::json([
+            'status' => $this->status, ],
             $this->responseCode
         );
     }

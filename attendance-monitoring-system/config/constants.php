@@ -1,4 +1,5 @@
 <?php
+
     return [
         'STATUS_CODE_SUCCESS' => [
             'CODE' => 'success',
@@ -16,17 +17,17 @@
                 'STUDENT_ADDED' => 'Student successfully added.',
                 'UPDATED_STUDENT' => 'Student successfully updated.',
                 'DELETED_STUDENT' => 'Student successfully deleted.',
-                'TRANSACTION_ADDED' => 'Transaction added.'
+                'TRANSACTION_ADDED' => 'Transaction added.',
             ],
         ],
-        'STATUS_CODE_FAILED'     => [
-            'CODE'              => 'failed',
-            'MESSAGES'          => [
+        'STATUS_CODE_FAILED' => [
+            'CODE' => 'failed',
+            'MESSAGES' => [
                 'FAILED_LOGIN' => 'Your email or password is incorrect.',
 
             ],
         ],
         'OK' => 200,
-        'INTERNAL' => 500
+        'INTERNAL' => 500,
 
     ];

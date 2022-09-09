@@ -1,21 +1,21 @@
-<?php 
+<?php
 
 namespace App\Helper;
 
 use Config;
 
-class Status {
+class Status
+{
+    public $code = '';
 
-	public $code 			= ''; 
-	public $message 		= '';
+    public $message = '';
 
-	/**
-	 *
-	 * @param
-	 * @return void
-	 */
-	public function __construct() {
-		$this->code = Config::get('constants.STATUS_CODE_SUCCESS');
-	}
-
+    /**
+     * @param
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->code = Config::get('constants.STATUS_CODE_SUCCESS');
+    }
 }
